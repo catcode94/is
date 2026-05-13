@@ -1,3 +1,8 @@
+# Enter Text: creative
+# Enter key: abc
+# Encrypted Text: csgaukvf
+# Decrypted Text: creative
+
 def generate_key(msg, key):
     key = list(key)
     if len(msg) == len(key):
