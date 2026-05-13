@@ -1,0 +1,122 @@
+# Enter the message: MAYANK
+# Enter the keyword (e.g., 'MONARCH'): king
+
+# Prepared Text for Encryption: MAYANK
+# Encrypted Message: PNZGGI
+# Decrypted Message: MAYANK
+
+import string
+
+def create_playfair_matrix(key):
+    key = key.upper().replace(" ", "")
+    key = "".join(sorted(list(set(key)), key=key.find)) # Remove duplicates, preserve order
+
+    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # J is omitted
+    key_matrix = []
+
+    # Add key characters to matrix
+    for char in key:
+        if char not in key_matrix and char in alphabet: # Ensure 'J' is not added if present in key
+            key_matrix.append(char)
+
+    # Add remaining alphabet characters
+    for char in alphabet:
+        if char not in key_matrix:
+            key_matrix.append(char)
+
+    matrix = []
+    for i in range(0, 25, 5):
+        matrix.append(key_matrix[i:i+5])
+    return matrix
+
+def prepare_text(text):
+    text = text.upper().replace(" ", "").replace("J", "I") # Uppercase, remove spaces, replace J with I
+    prepared = []
+    i = 0
+    while i < len(text):
+        if i == len(text) - 1: # Last character, add X
+            prepared.append(text[i])
+            prepared.append('X')
+            break
+
+        char1 = text[i]
+        char2 = text[i+1]
+
+        if char1 == char2: # Double letters
+            prepared.append(char1)
+            prepared.append('X')
+            i += 1
+        else:
+            prepared.append(char1)
+            prepared.append(char2)
+            i += 2
+    return "".join(prepared)
+
+def find_char_position(matrix, char):
+    for r in range(5):
+        for c in range(5):
+            if matrix[r][c] == char:
+                return r, c
+    return -1,
+
+def playfair_encrypt(text, matrix):
+    prepared_text = prepare_text(text)
+    encrypted_text = []
+
+    for i in range(0, len(prepared_text), 2):
+        char1 = prepared_text[i]
+        char2 = prepared_text[i+1]
+
+        r1, c1 = find_char_position(matrix, char1)
+        r2, c2 = find_char_position(matrix, char2)
+
+        if r1 == r2: # Same row
+            encrypted_text.append(matrix[r1][(c1 + 1) % 5])
+            encrypted_text.append(matrix[r2][(c2 + 1) % 5])
+        elif c1 == c2: # Same column
+            encrypted_text.append(matrix[(r1 + 1) % 5][c1])
+            encrypted_text.append(matrix[(r2 + 1) % 5][c2])
+        else: # Rectangle
+            encrypted_text.append(matrix[r1][c2])
+            encrypted_text.append(matrix[r2][c1])
+
+    return "".join(encrypted_text)
+
+def playfair_decrypt(text, matrix):
+    decrypted_text = []
+
+    for i in range(0, len(text), 2):
+        char1 = text[i]
+        char2 = text[i+1]
+
+        r1, c1 = find_char_position(matrix, char1)
+        r2, c2 = find_char_position(matrix, char2)
+
+        if r1 == r2: # Same row
+            decrypted_text.append(matrix[r1][(c1 - 1 + 5) % 5])
+            decrypted_text.append(matrix[r2][(c2 - 1 + 5) % 5])
+        elif c1 == c2: # Same column
+            decrypted_text.append(matrix[(r1 - 1 + 5) % 5][c1])
+            decrypted_text.append(matrix[(r2 - 1 + 5) % 5][c2])
+        else: # Rectangle
+            decrypted_text.append(matrix[r1][c2])
+            decrypted_text.append(matrix[r2][c1])
+
+    return "".join(decrypted_text)
+
+# User Input
+message = input("Enter the message: ")
+keyword = input("Enter the keyword (e.g., 'MONARCH'): ")
+
+# Create Playfair matrix
+playfair_matrix = create_playfair_matrix(keyword)
+
+
+# Encrypt
+encrypted_message = playfair_encrypt(message, playfair_matrix)
+print(f"\nPrepared Text for Encryption: {prepare_text(message)}")
+print(f"Encrypted Message: {encrypted_message}")
+
+# Decrypt
+decrypted_message = playfair_decrypt(encrypted_message, playfair_matrix)
+print(f"Decrypted Message: {decrypted_message}")
