@@ -1,0 +1,63 @@
+DOWNLOAD
+--------
+URL: 
+
+https://www.openwall.com/john/k/john-1.9.0-jumbo-1-win64.zip
+
+- Download and extract the ZIP
+- Rename/move extracted folder to --> C:\john
+
+
+OPEN CMD IN JOHN'S FOLDER
+--------------------------
+1. Press Win + R --> type cmd --> Enter
+2. Run: cd C:\john\run
+   (All commands below are run from this folder)
+
+
+CREATE HASH FILE
+----------------
+Open Notepad, paste the lines below, save as:
+C:\john\run\hashes.txt
+
+alice:482c811da5d5b4bc6d497ffa98491e38
+bob:5d41402abc4b2a76b9719d911017c592
+carol:e99a18c428cb38d5f260853678922e03
+dave:f25a2fc72690b780b2a14e140ef6a9e0
+eve:e9f5347887c2a4b5f6e12c07e985eb76
+
+Plain passwords behind these hashes:
+  alice  --> password123   (weak)
+  bob    --> hello         (weak)
+  carol  --> abc123        (weak)
+  dave   --> iloveyou      (weak)
+  eve    --> P@ssw0rd#99   (strong)
+
+
+COMMANDS
+--------
+
+1. WORDLIST ATTACK (cracks weak/common passwords)
+   Command:
+   john --format=raw-md5 --wordlist=password.lst hashes.txt
+
+   ( Tries every word in password.lst against the hashes )
+
+
+2. VIEW CRACKED PASSWORDS
+   Command:
+   john --show --format=raw-md5 hashes.txt
+
+   ( Displays all successfully cracked passwords so far )
+
+
+3. BRUTE FORCE ATTACK on strong password (incremental mode)
+   Command:
+   john --format=raw-md5 --incremental hashes.txt
+
+   ( Tries every possible character combination )
+   Run for 1-2 minutes then press Ctrl+C to stop.
+   The run: 
+   john --show --format=raw-md5 hashes.txt
+
+   Result: eve (P@ssw0rd#99) will NOT be cracked --> proves strong password works.
