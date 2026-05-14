@@ -1,0 +1,17 @@
+ping google.com                     (Linux / Windows)
+
+ping -n 4 google.com               (Windows)
+
+ipconfig                           (Windows)
+
+ifconfig                           (Linux)
+
+tracert google.com                 (Windows)
+
+arp -a                             (Linux / Windows)
+
+arp -n                             (Linux)
+
+netstat -an                        (Linux / Windows)
+
+whois google.com                   (Linux)
