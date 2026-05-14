@@ -1,0 +1,6 @@
+1. Download burpsuit on windows -> Burpsuit community edition
+2. Open and and turn on intercept
+3. open browswer button on top right 
+4. httpbin.org/get?name=saloni
+5. modifying reuqest either name or User-Agent 
+6. Keep forwading untill website open up
