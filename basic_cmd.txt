@@ -15,3 +15,6 @@ arp -n                             (Linux)
 netstat -an                        (Linux / Windows)
 
 whois google.com                   (Linux)
+
+winget install WHOIS
+whois google.com                   (now chal jaygi on windows)
